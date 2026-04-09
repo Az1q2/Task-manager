@@ -1,21 +1,24 @@
-from pydantic import PostgresDsn, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     DB_USER: str
     DB_PASSWORD: str
     DB_HOST: str
-    DB_PORT: int = 5432
+    DB_PORT: int
     DB_NAME: str
 
     @property
-    def Database_url_psycopg(self) -> str:
-        return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+    def database_url_asyncpg(self):
+        # DSN для асинхронного подключения
+        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+
+
 
     @property
-    def Database_url_asyncpg(self) -> str:
-        return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+    def database_url_psycopg(self):
+        # DSN для синхронного подключения
+        return f"postgresql+psycopg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", extra='ignore')
 
 settings = Settings()
