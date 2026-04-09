@@ -1,7 +1,9 @@
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from app.modules.usres.router import router
+# from src.modules.router import router as auth_router
+# from src.modules.router import router as user_router
+# from src.modules.router import router as task_router
 from utils.templates import templates
 
 app = FastAPI()
@@ -24,3 +26,7 @@ def login_page(request: Request):
 
 if __name__ == "__main__":
     uvicorn.run('main:app', reload=True)
+
+# app.include_router(auth_router, prefix="/auth", tags=["auth"])
+# app.include_router(user_router, prefix="/users", tags=["users"])
+# app.include_router(task_router, prefix="/task", tags=["task"])
