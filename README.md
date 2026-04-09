@@ -27,10 +27,14 @@
 ## Быстрый старт
 
 1. Устанавливаем uv, если его ещё нет:  
-```curl -LsSf https://astral.sh/uv/install.sh | sh```
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
   
-2. Установка окружения и зависимостей:  
-```uv sync```
+2. Установка окружения и зависимостей:
+```
+uv sync
+```
 
 
 ## Пример окружения .env
@@ -49,9 +53,15 @@ DB_NAME=
 
 
 1. Создание миграции  
-`uv run alembic revision --autogenerate -m "Описание"`
+```
+uv run alembic revision --autogenerate -m "Описание"
+```
+
 2. Применение миграций  
-`uv run alembic upgrade head`
+
+```
+uv run alembic upgrade head
+```
 
 ## Структура ORM моделей
 
@@ -81,7 +91,9 @@ DB_NAME=
 
 
 Для запуска всей инфраструктуры (приложение + база данных) одной командой, но пока запускается только база данных(:  
-`docker-compose up --build` 
+```
+docker-compose up --build
+``` 
 
 ### Сервисы в compose:
 
