@@ -4,7 +4,7 @@
 
 Современное приложение для управления задачами, построенное на базе FastAPI и PostgreSQL.
 
----
+
 
 ### Стек технологий:
 
@@ -14,18 +14,18 @@
 
 **ORM**: SQLAlchemy (async), но на данный момент только sync
 
-**Migrations**: Alembic, не полностью готов
+**Migrations**: Alembic
 
 **Package Manager**: uv
 
 **Containerization**: Docker & Docker Compose, но пока api не поднимается docker
 
-F**rontend**: HTML, CSS (Jinja2 templates)
+**Frontend**: HTML, CSS (Jinja2 templates)
 
 
 
 ## Быстрый старт
-___
+
 1. Устанавливаем uv, если его ещё нет:  
 ```curl -LsSf https://astral.sh/uv/install.sh | sh```
   
@@ -35,7 +35,7 @@ ___
 
 ## Пример окружения .env
 
----
+
 
 ```
 DB_USER=
@@ -46,7 +46,7 @@ DB_NAME=
 ```
 ## Миграции Alembic
 
---- 
+
 
 1. Создание миграции  
 `uv run alembic revision --autogenerate -m "Описание"`
@@ -55,7 +55,7 @@ DB_NAME=
 
 ## Структура ORM моделей
 
----
+
 
 Модели данных спроектированы с использованием движка SQLAlchemy. 
 
@@ -69,7 +69,7 @@ DB_NAME=
 
 ## Frontend 
 
----
+
 
 
 **HTML**: Шаблоны находятся в папке src/templates и используют синтаксис Jinja2.
@@ -78,7 +78,7 @@ DB_NAME=
 
 ## Docker Compose
 
----
+
 
 Для запуска всей инфраструктуры (приложение + база данных) одной командой, но пока запускается только база данных(:  
 `docker-compose up --build` 

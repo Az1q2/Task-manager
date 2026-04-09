@@ -20,10 +20,9 @@ async_engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=sync_engine)
 
 
-def create_tables():
-    Base.metadata.drop_all(sync_engine)
-    Base.metadata.create_all(sync_engine)
-
-if __name__ == "__main__":
-    create_tables()
-    print("Таблицы успешно созданы!")
+# def create_tables():
+#     Base.metadata.drop_all(sync_engine)
+#
+# if __name__ == "__main__":
+#     create_tables()
+#     print("Таблицы успешно созданы!")
