@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 # from src.modules.router import router as auth_router
 # from src.modules.router import router as user_router
 # from src.modules.router import router as task_router
-from utils.templates import templates
+from src.utils.templates import templates
 
 app = FastAPI()
 
