@@ -1,7 +1,8 @@
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from src.utils.templates import templates
+from app.modules.usres.router import router
+from utils.templates import templates
 
 app = FastAPI()
 

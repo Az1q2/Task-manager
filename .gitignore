@@ -2,5 +2,4 @@
 .env*
 .venv/
 __pycache__/
-*.pyc"
-.python-version
+*.pyc
