@@ -7,7 +7,7 @@ from src.db.base import Base
 class Task(Base):
     __tablename__ = "tasks"
 
-    # первмчный ключ id
+    # первичный ключ id
     id: Mapped[int] = mapped_column(primary_key=True)
 
     # title - указываем длину 100, делаем непустым

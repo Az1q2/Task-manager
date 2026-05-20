@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
-from datetime import datetime
+from src.modules.tasks.schemas import TaskResponse
 
 
 class UserCreate(BaseModel):
