@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Создать задачу{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2 class="auth-title">Новая задача</h2>
+        <form action="/tasks/create" method="POST" class="auth-form">
+            <div class="form-group">
+                <label class="form-label" for="title">Название задачи</label>
+                <input class="form-input" type="text" id="title" name="title" required placeholder="Введите название...">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="description">Описание</label>
+                <textarea class="form-input" id="description" name="description" rows="4"></textarea>
+            </div>
+
+            <button type="submit" class="auth-btn">Создать</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

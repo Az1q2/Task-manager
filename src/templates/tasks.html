@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Мои задачи | Task manager{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        display: block !important; /* Отключаем флекс центрирование */
+        width: 100% !important;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    .tasks-dashboard {
+        width: 100%; /* Заставляем блок растянуться */
+    }
+</style>
+
+<div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 25px; display: flex; justify-content: space-around; text-align: center;">
+    <div>
+        <div style="font-size: 28px; font-weight: 800; color: #111827;">{{ total }}</div>
+        <div style="font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Всего</div>
+    </div>
+    <div>
+        <div style="font-size: 28px; font-weight: 800; color: #059669;">{{ completed }}</div>
+        <div style="font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Выполнено</div>
+    </div>
+    <div>
+        <div style="font-size: 28px; font-weight: 800; color: #d97706;">{{ pending }}</div>
+        <div style="font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Осталось</div>
+    </div>
+</div>
+
+<form action="/" method="GET" style="margin-bottom: 25px; display: flex; gap: 10px;">
+    <input
+        type="text"
+        name="search"
+        value="{{ search_query }}"
+        placeholder="Поиск по названию..."
+        style="flex-grow: 1; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; outline: none;"
+    >
+    <button type="submit" style="padding: 12px 24px; background-color: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+        Найти
+    </button>
+
+    {% if search_query %}
+    <a href="/" style="padding: 12px 24px; background-color: #ef4444; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; display: flex; align-items: center;">
+        Сбросить
+    </a>
+    {% endif %}
+</form>
+
+
+<div class="tasks-dashboard">
+    <div class="tasks-header">
+        <div class="header-left">
+            <h1>Мои задачи</h1>
+            <p class="tasks-count">Всего задач: {{ tasks|length if tasks else 0 }}</p>
+        </div>
+        <a href="/tasks/create" class="btn-create-task">
+            <span class="plus-icon">+</span> Новая задача
+        </a>
+    </div>
+
+    <div class="tasks-grid">
+        {% if tasks %}
+            {% for task in tasks %}
+            <div class="task-card">
+                <div class="task-card-header">
+                    {% if task.is_completed %}
+                        <span class="badge status-done">Выполнено</span>
+                    {% else %}
+                        <span class="badge status-todo">В процессе</span>
+                    {% endif %}
+                </div>
+
+                <div class="task-body">
+                    <h3 class="task-title" style="{% if task.is_completed %}text-decoration: line-through; color: #9ca3af;{% endif %}">
+                        {{ task.title }}
+                    </h3>
+                    <p class="task-description">{{ task.description if task.description else '' }}</p>
+                </div>
+
+                <div class="task-card-footer">
+                    <div class="task-actions" style="width: 100%; justify-content: space-between; display: flex; align-items: center;">
+                        <form action="/tasks/{{ task.id }}/toggle" method="POST" style="display:inline;">
+                            <button type="submit" class="action-btn">✅</button>
+                        </form>
+                        <div style="display: flex; gap: 8px;">
+                            <a href="/tasks/{{ task.id }}/edit" class="action-btn edit-btn">✏️</a>
+                            <form action="/tasks/{{ task.id }}/delete" method="POST" style="display:inline;">
+                                <button type="submit" class="action-btn delete-btn" onclick="return confirm('Удалить?');">🗑️</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-tasks-fallback" style="width: 100%; grid-column: 1 / -1;">
+                <div class="fallback-icon">📋</div>
+                <h3>Задач пока нет</h3>
+                <p>Создайте свою первую задачу, чтобы начать планирование.</p>
+                <a href="/tasks/create" class="btn-create-task" style="margin-top: 15px; display: inline-block;">Добавить задачу</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

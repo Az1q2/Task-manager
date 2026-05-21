@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block header %}{% endblock %}
+
+{% block title %}Вход | Task manager{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+
+        {% if already_logged_in %}
+            <div class="already-in-box">
+                <div class="info-icon" style="font-size: 48px; text-align: center; margin-bottom: 15px;">👋</div>
+                <h2 class="auth-title" style="text-align: center;">Вы уже вошли!</h2>
+                <p class="info-text" style="text-align: center; color: #6b7280; margin-bottom: 25px;">
+                    Вы уже авторизованы в системе. Что хотите сделать?
+                </p>
+
+                <div style="display: flex; gap: 10px; flex-direction: column;">
+                    <a href="/" class="auth-btn" style="text-align: center; text-decoration: none;">
+                        Перейти к задачам
+                    </a>
+                    <a href="/logout" class="auth-btn" style="text-align: center; text-decoration: none; background-color: #6b7280;">
+                        Выйти из аккаунта
+                    </a>
+                </div>
+            </div>
+
+        {% else %}
+            <h2 class="auth-title">Вход</h2>
+
+            {% if error %}
+                <div style="color: #dc2626; background-color: #fee2e2; padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 14px;">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form action="/login" method="POST" class="auth-form">
+                <div class="form-group">
+                    <label class="form-label" for="login">Пользователь</label>
+                    <input class="form-input" type="text" id="login" name="login" required placeholder="Username или email">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Пароль</label>
+                    <input class="form-input" type="password" id="password" name="password" required placeholder="Введите пароль">
+                </div>
+
+                <button type="submit" class="auth-btn">Войти</button>
+            </form>
+
+            <div class="auth-footer">
+                <a href="/register" class="auth-link">Регистрация</a>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi.responses import RedirectResponse
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -52,17 +53,6 @@ async def update_existing_task(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Задача не найдена")
 
     return updated_task
-
-@router.post("/{task_id}/toggle", response_model=TaskResponse)
-async def toggle_status(
-        task_id: int,
-        current_user: User = Depends(get_current_user),
-        session: AsyncSession = Depends(get_db)
-):
-    task = await task_service.toggle_task_completion(session, task_id, current_user.id)
-    if not task:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Задача не найдена")
-    return task
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_existing_task(

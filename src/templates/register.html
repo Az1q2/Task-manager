@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block header %}{% endblock %}
+
+{% block title %}Регистрация | Task manager{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2 class="auth-title">Регистрация</h2>
+        
+        {% if error %}
+            <div style="color: #dc2626; background-color: #fee2e2; padding: 10px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 14px;">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form action="/register" method="POST" class="auth-form">
+            <div class="form-group">
+                <label class="form-label" for="username">Пользователь</label>
+                <input class="form-input" type="text" id="username" name="username" required minlength="3" placeholder="Минимум 3 символа" value="{{ username_value or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">Email адрес</label>
+                <input class="form-input" type="email" id="email" name="email" required placeholder="example@mail.com" value="{{ email_value or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Пароль</label>
+                <input class="form-input" type="password" id="password" name="password" required minlength="6" placeholder="Минимум 6 символов">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password_confirm">Подтверждение пароля</label>
+                <input class="form-input" type="password" id="password_confirm" name="password_confirm" required minlength="6" placeholder="Повторите пароль">
+            </div>
+            
+            <button type="submit" class="auth-btn">Зарегистрироваться</button>
+        </form>
+        
+        <div class="auth-footer">
+            <a href="/login" class="auth-link">Вход</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
