@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Request, Depends, Form, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-
-# Импортируем твои зависимости и сервисы
 from src.db.dependencies import get_db
 from src.modules.tasks import service as task_service
 from fastapi.templating import Jinja2Templates
@@ -58,7 +56,6 @@ async def handle_page_register(
         email: str = Form(...),
         password: str = Form(...),
         password_confirm: str = Form(...),
-        session: AsyncSession = Depends(get_db)
 ):
     error_message = None
 
@@ -67,7 +64,6 @@ async def handle_page_register(
     elif len(password) < 6:
         error_message = "Пароль должен содержать минимум 6 символов."
 
-    # 2. Проверяем совпадение паролей
     elif password != password_confirm:
         error_message = "Пароли не совпадают."
     if error_message:
