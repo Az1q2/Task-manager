@@ -10,7 +10,7 @@ class Task(Base):
     # первичный ключ id
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    # title - указываем длину 100, делаем непустым
+    # title - указываем длину 127, делаем непустым
     title: Mapped[str] = mapped_column(String(127), nullable=False)
 
     # указываем тип данных текст, постгрес может хранить очень много информации в этом поле, но так же оно может быть пустым
