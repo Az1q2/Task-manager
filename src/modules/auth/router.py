@@ -1,17 +1,88 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, Form, Request, Response, status, HTTPException
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from pydantic import ValidationError
 from src.db.dependencies import get_db
-from src.modules.auth.schemas import UserRegister, UserLogin, UserInfo, LoginResponse
+from src.utils.templates import templates
 from src.modules.auth import service as auth_service
+from src.modules.auth.service import AuthError
+from src.modules.auth.schemas import UserRegister, UserLogin, UserInfo, LoginResponse
 
-router = APIRouter(prefix="/api/auth", tags=["Auth API"])
+router = APIRouter(tags=["Auth"])
 
 
-@router.post("/login", response_model=LoginResponse)
-async def login(user_data: UserLogin, response: Response, session: AsyncSession = Depends(get_db)):
-    user = await auth_service.authenticate_user(session, user_data)
-    if not user:
-        raise HTTPException(status_code=401, detail="Неверный пароль")
+@router.get("/login", response_class=HTMLResponse)
+async def get_login_page(request: Request):
+    if request.cookies.get("user_id"):
+        return templates.TemplateResponse(
+            request=request, name="login.html", context={"already_logged_in": True}
+        )
+    return templates.TemplateResponse(request=request, name="login.html")
+
+
+@router.get("/register", response_class=HTMLResponse)
+async def get_register_page(request: Request):
+    return templates.TemplateResponse(request=request, name="register.html")
+
+
+@router.post("/login")
+async def handle_page_login(
+        request: Request,
+        login: str = Form(...),
+        password: str = Form(...),
+        session: AsyncSession = Depends(get_db)
+):
+    try:
+        user_data = UserLogin(login=login, password=password)
+        user = await auth_service.authenticate_user(session, user_data)
+    except AuthError as e:
+        return templates.TemplateResponse(
+            request=request, name="login.html", context={"error": e.message}
+        )
+
+    redirect = RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
+    redirect.set_cookie(key="user_id", value=str(user.id), httponly=True)
+    return redirect
+
+@router.post("/register")
+async def handle_page_register(
+        request: Request,
+        username: str = Form(...),
+        email: str = Form(...),
+        password: str = Form(...),
+        password_confirm: str = Form(...),
+        session: AsyncSession = Depends(get_db)
+):
+    try:
+        user_data = UserRegister(
+            username=username, email=email, password=password, password_confirm=password_confirm
+        )
+        await auth_service.register_user(session, user_data)
+    except ValidationError as e:
+        return templates.TemplateResponse(
+            request=request, name="register.html", context={"error": e.errors()[0].get("msg")}
+        )
+    except AuthError as e:
+        return templates.TemplateResponse(
+            request=request, name="register.html", context={"error": e.message}
+        )
+
+    return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+
+
+@router.get("/logout")
+async def logout_user():
+    response = RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+    response.delete_cookie(key="user_id")
+    return response
+
+
+@router.post("/api/auth/login", response_model=LoginResponse)
+async def api_login(user_data: UserLogin, response: Response, session: AsyncSession = Depends(get_db)):
+    try:
+        user = await auth_service.authenticate_user(session, user_data)
+    except AuthError as e:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=e.message)
 
     response.set_cookie(key="user_id", value=str(user.id), httponly=True)
     return LoginResponse(user=UserInfo.model_validate(user))
