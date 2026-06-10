@@ -34,7 +34,15 @@ async def authenticate_user(session: AsyncSession, login_data: UserLogin) -> Use
     if not user:
         user = await user_repository.get_by_email(session, login_data.login)
 
-    if not user or not verify_password(login_data.password, user.hashed_password):
+    if not user:
+        raise AuthError("Неверный логин или пароль")
+
+    try:
+        password_verified = verify_password(login_data.password, user.hashed_password)
+    except (ValueError, TypeError):
+        raise AuthError("Неверный логин или пароль")
+
+    if not password_verified:
         raise AuthError("Неверный логин или пароль")
 
     return user

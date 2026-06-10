@@ -3,13 +3,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
 from src.modules.users.models import User
 
-async def save(session: AsyncSession, user: User):
+async def save(session: AsyncSession, user: User) -> User:
     session.add(user)
     await session.commit()
     await session.refresh(user)
     return user
 
-async def get_by_username(session: AsyncSession, username: str):
+async def get_by_username(session: AsyncSession, username: str) -> Optional[User]:
     query = select(User).where(User.username == username)
     result = await session.execute(query)
     return result.scalar_one_or_none()

@@ -38,7 +38,7 @@
             <form action="/login" method="POST" class="auth-form">
                 <div class="form-group">
                     <label class="form-label" for="login">Пользователь</label>
-                    <input class="form-input" type="text" id="login" name="login" required placeholder="Username или email">
+                    <input class="form-input" type="text" id="login" name="login" required placeholder="Username или email" value="{{ login_value or '' }}">
                 </div>
 
                 <div class="form-group">

@@ -125,7 +125,7 @@ body {
     padding: 16px;
     font-size: 16px;
     font-weight: 500;
-    text-transform: lowercase;
+    text-transform: none;
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
